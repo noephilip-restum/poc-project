@@ -2,11 +2,13 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import VideoItemWithHover from "./VideoItemWithHover";
+import ActorAvatar from "./ActorAvatar";
 import { Movie } from "types/Movies";
+import { Actor } from "types/Actor";
 interface GridWithInfiniteScrollProps {
-  movies: Movie[];
+  data: Movie[] | Actor[];
 }
-const GridWithInfiniteScroll = ({ movies }: GridWithInfiniteScrollProps) => {
+const GridWithInfiniteScroll = ({ data }: GridWithInfiniteScrollProps) => {
   return (
     <Container
       maxWidth={false}
@@ -20,12 +22,16 @@ const GridWithInfiniteScroll = ({ movies }: GridWithInfiniteScrollProps) => {
       <Typography
         variant="h5"
         sx={{ color: "text.primary", mb: 2 }}
-      >{`All Movies`}</Typography>
+      >{`Movies/Actors`}</Typography>
 
       <Grid container spacing={2}>
-        {movies.map((video: any) => (
+        {data.map((video: any) => (
           <Grid key={video.id} item xs={6} sm={3} md={2} sx={{ zIndex: 1 }}>
-            <VideoItemWithHover video={video} />
+            {video.title ? (
+              <VideoItemWithHover video={video} />
+            ) : (
+              <ActorAvatar actor={video} />
+            )}
           </Grid>
         ))}
       </Grid>

@@ -21,7 +21,6 @@ const pages = ["Home", "Actors"];
 const Header = () => {
   const navigate = useNavigate();
   const isOffset = useOffSetTop(100);
-
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -32,6 +31,7 @@ const Header = () => {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -94,22 +94,6 @@ const Header = () => {
             ))}
           </Menu>
         </Box>
-        <Typography
-          variant="h5"
-          noWrap
-          component="a"
-          href=""
-          sx={{
-            mr: 2,
-            display: { xs: "flex", md: "none" },
-            flexGrow: 1,
-            fontWeight: 700,
-            color: "inherit",
-            textDecoration: "none",
-          }}
-        >
-          Digital Streaming Application
-        </Typography>
         <Stack
           direction="row"
           spacing={3}
@@ -117,7 +101,7 @@ const Header = () => {
         >
           {pages.map((page) => (
             <NetflixNavigationLink
-              to=""
+              to={page === "Actors" ? "/browse/actors" : "/"}
               variant="subtitle1"
               key={page}
               onClick={handleCloseNavMenu}

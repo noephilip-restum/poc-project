@@ -14,6 +14,7 @@ const Loadable = (Component: ElementType) => (props: any) => {
 
 const HomePage = Loadable(lazy(() => import("pages/HomePage")));
 const MovieExplore = Loadable(lazy(() => import("pages/MovieExplore")));
+const ActorExplore = Loadable(lazy(() => import("pages/ActorExplore")));
 const Login = Loadable(lazy(() => import("pages/Login")));
 const SignUp = Loadable(lazy(() => import("pages/SignUp")));
 const AdminPage = Loadable(lazy(() => import("pages/AdminPage")));
@@ -38,6 +39,9 @@ export default function MainRoutes() {
         },
         {
           children: [{ path: "movies", element: <MovieExplore /> }],
+        },
+        {
+          children: [{ path: "actors", element: <ActorExplore /> }],
         },
       ],
     },

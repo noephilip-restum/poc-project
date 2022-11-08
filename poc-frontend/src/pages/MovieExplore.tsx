@@ -14,7 +14,7 @@ const MovieExplore = () => {
   }, [dispatch]);
 
   if (movies) {
-    return <GridPage movies={movies} />;
+    return <GridPage data={movies} />;
   }
   return null;
 };
