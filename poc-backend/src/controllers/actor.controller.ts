@@ -108,6 +108,26 @@ export class ActorController {
     return this.actorRepository.findById(id, filter);
   }
 
+  @get('/actors/search/{name}')
+  @response(200, {
+    description: 'Used for actor search',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Actor, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async findActors(@param.path.string('name') name: string): Promise<Actor[]> {
+    const pattern = new RegExp('^' + name + '.*', 'i');
+    const data = await this.actorRepository.find({
+      where: {firstName: {regexp: pattern}},
+    });
+    return data;
+  }
+
   @patch('/actors/{id}')
   @response(204, {
     description: 'Actor PATCH success',

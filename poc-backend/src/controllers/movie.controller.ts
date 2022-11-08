@@ -1,11 +1,4 @@
-import {
-  Count,
-  CountSchema,
-  Filter,
-  FilterExcludingWhere,
-  repository,
-  Where,
-} from '@loopback/repository';
+import {Count, CountSchema, repository, Where} from '@loopback/repository';
 import {
   del,
   get,
@@ -68,7 +61,7 @@ export class MovieController {
       },
     },
   })
-  async find(@param.filter(Movie) filter?: Filter<Movie>): Promise<Movie[]> {
+  async find(): Promise<Movie[]> {
     return this.movieRepository.find({include: ['actors', 'reviews']});
   }
 
@@ -100,12 +93,29 @@ export class MovieController {
       },
     },
   })
-  async findById(
-    @param.path.string('id') id: string,
-    @param.filter(Movie, {exclude: 'where'})
-    filter?: FilterExcludingWhere<Movie>,
-  ): Promise<Movie> {
+  async findById(@param.path.string('id') id: string): Promise<Movie> {
     return this.movieRepository.findById(id, {include: ['actors', 'reviews']});
+  }
+
+  @get('/movies/search/{name}')
+  @response(200, {
+    description: 'Used for movie search',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Movie, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async findMovies(@param.path.string('name') name?: string): Promise<Movie[]> {
+    const pattern = new RegExp('^' + name + '.*', 'i');
+    const data = await this.movieRepository.find({
+      where: {title: {regexp: pattern}},
+      include: ['actors', 'reviews'],
+    });
+    return data;
   }
 
   @patch('/movies/{id}')
