@@ -13,6 +13,11 @@ import {
 import {Movie} from '../models';
 import {MovieRepository} from '../repositories';
 
+type CustomResponse = {
+  data: Movie[] | Movie;
+  status: boolean;
+  message: string;
+};
 export class MovieController {
   constructor(
     @repository(MovieRepository)
@@ -36,8 +41,20 @@ export class MovieController {
       },
     })
     movie: Omit<Movie, 'id'>,
-  ): Promise<Movie> {
-    return this.movieRepository.create(movie);
+  ): Promise<CustomResponse> {
+    try {
+      if (!movie.title) throw new Error('Title is required');
+      if (!movie.year_of_release) throw new Error('Date is required');
+      if (!movie.cost) throw new Error('Cost is required');
+      if (!movie.description) throw new Error('Description is required');
+      if (movie.actorIds.length === 0) throw new Error('Actor/s is required');
+      if (!movie.image_link) throw new Error('Image link is required');
+
+      await this.movieRepository.create(movie);
+      return {data: [], status: true, message: 'Movie is added'};
+    } catch (error) {
+      return {data: [], status: false, message: error.message};
+    }
   }
 
   @get('/movies/count')
@@ -132,8 +149,20 @@ export class MovieController {
       },
     })
     movie: Movie,
-  ): Promise<void> {
-    await this.movieRepository.updateById(id, movie);
+  ): Promise<CustomResponse> {
+    try {
+      if (!movie.title) throw new Error('Title is required');
+      if (!movie.year_of_release) throw new Error('Date is required');
+      if (!movie.cost) throw new Error('Cost is required');
+      if (!movie.description) throw new Error('Description is required');
+      if (movie.actorIds.length === 0) throw new Error('Actor/s is required');
+      if (!movie.image_link) throw new Error('Image link is required');
+
+      await this.movieRepository.updateById(id, movie);
+      return {data: [], status: true, message: 'Movie is edited'};
+    } catch (error) {
+      return {data: [], status: false, message: error.message};
+    }
   }
 
   @put('/movies/{id}')

@@ -20,6 +20,12 @@ import {
 import {Actor} from '../models';
 import {ActorRepository} from '../repositories';
 
+type CustomResponse = {
+  data: Actor[] | Actor;
+  status: boolean;
+  message: string;
+};
+
 export class ActorController {
   constructor(
     @repository(ActorRepository)
@@ -43,8 +49,19 @@ export class ActorController {
       },
     })
     actor: Omit<Actor, 'id'>,
-  ): Promise<Actor> {
-    return this.actorRepository.create(actor);
+  ): Promise<CustomResponse> {
+    try {
+      if (!actor.firstName) throw new Error('First name is required');
+      if (!actor.lastName) throw new Error('Last name is required');
+      if (!actor.gender) throw new Error('Gender is required');
+      if (!actor.age) throw new Error('Age is required');
+      if (!actor.image_link) throw new Error('Image Link is required');
+
+      this.actorRepository.create(actor);
+      return {data: [], status: true, message: 'Actor is successfully added'};
+    } catch (err) {
+      return {data: [], status: false, message: err.message};
+    }
   }
 
   @get('/actors/count')
@@ -142,8 +159,23 @@ export class ActorController {
       },
     })
     actor: Actor,
-  ): Promise<void> {
-    await this.actorRepository.updateById(id, actor);
+  ): Promise<CustomResponse> {
+    try {
+      if (!actor.firstName) throw new Error('First name is required');
+      if (!actor.lastName) throw new Error('Last name is required');
+      if (!actor.gender) throw new Error('Gender is required');
+      if (!actor.age) throw new Error('Age is required');
+      if (!actor.image_link) throw new Error('Image Link is required');
+
+      await this.actorRepository.updateById(id, actor);
+      return {
+        data: [],
+        status: true,
+        message: 'Actor is edited',
+      };
+    } catch (err) {
+      return {data: [], status: false, message: err.message};
+    }
   }
 
   @put('/actors/{id}')

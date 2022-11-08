@@ -20,6 +20,11 @@ import {
 import {Review} from '../models';
 import {ReviewRepository} from '../repositories';
 
+type CustomResponse = {
+  data: Review[] | Review;
+  status: boolean;
+  message: string;
+};
 export class ReviewController {
   constructor(
     @repository(ReviewRepository)
@@ -43,8 +48,21 @@ export class ReviewController {
       },
     })
     review: Omit<Review, 'id'>,
-  ): Promise<Review> {
-    return this.reviewRepository.create(review);
+  ): Promise<CustomResponse> {
+    try {
+      if (!review.message) throw new Error('Message is required');
+      if (!review.rating) throw new Error('Rating is required');
+      if (!review.movieId) throw new Error('Movie is required');
+
+      await this.reviewRepository.create(review);
+      return {
+        data: [],
+        status: true,
+        message: 'Review is added',
+      };
+    } catch (err) {
+      return {data: [], status: false, message: err.message};
+    }
   }
 
   @get('/reviews/count')
@@ -122,8 +140,21 @@ export class ReviewController {
       },
     })
     review: Review,
-  ): Promise<void> {
-    await this.reviewRepository.updateById(id, review);
+  ): Promise<CustomResponse> {
+    try {
+      if (!review.message) throw new Error('Message is required');
+      if (!review.rating) throw new Error('Rating is required');
+      if (!review.movieId) throw new Error('Movie is required');
+
+      await this.reviewRepository.updateById(id, review);
+      return {
+        data: [],
+        status: true,
+        message: 'Review is edited',
+      };
+    } catch (err) {
+      return {data: [], status: false, message: err.message};
+    }
   }
 
   @put('/reviews/{id}')

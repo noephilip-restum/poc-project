@@ -7,6 +7,7 @@ import {
 import {inject} from '@loopback/core';
 import {Filter, FilterExcludingWhere, repository} from '@loopback/repository';
 import {
+  del,
   get,
   getModelSchemaRef,
   param,
@@ -22,6 +23,12 @@ import _ from 'lodash';
 import {Users} from '../models';
 import {UsersRepository} from '../repositories';
 import {MyUserService} from '../services';
+
+type CustomResponse = {
+  data: Users[] | Users;
+  status: boolean;
+  message: string;
+};
 
 const CredentialsSchema: SchemaObject = {
   type: 'object',
@@ -114,15 +121,38 @@ export class UsersController {
       },
     })
     users: Omit<Users, '_id'>,
-  ): Promise<Users> {
-    const password = await hash(users.password, await genSalt());
-    const savedUser = await this.usersRepository.create(
-      _.omit(users, 'password'),
-    );
+  ): Promise<CustomResponse> {
+    const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    const findUser = await this.usersRepository.find({
+      where: {email: users.email},
+    });
+    try {
+      if (!users.firstName) throw new Error('First name is required');
+      if (!users.lastName) throw new Error('Last name is required');
+      if (!users.email) throw new Error('Email is required');
+      if (!emailPattern.test(users.email)) throw new Error('Email is invalid');
+      if (findUser.length > 0) throw new Error('Email is already registered');
+      if (!users.account_status) throw new Error('Status is required');
+      if (!users.account_role) throw new Error('Role is required');
+      if (!users.password) throw new Error('Password is required');
 
-    await this.usersRepository.userCredential(savedUser._id).create({password});
+      const password = await hash(users.password, await genSalt());
+      const savedUser = await this.usersRepository.create(
+        _.omit(users, 'password'),
+      );
 
-    return savedUser;
+      await this.usersRepository
+        .userCredential(savedUser._id)
+        .create({password});
+
+      return {
+        data: savedUser,
+        status: true,
+        message: 'Successfully Registered',
+      };
+    } catch (err) {
+      return {data: [], status: false, message: err.message};
+    }
   }
 
   // @get('/users/count')
@@ -149,25 +179,6 @@ export class UsersController {
   async find(@param.filter(Users) filter?: Filter<Users>): Promise<Users[]> {
     return this.usersRepository.find(filter);
   }
-
-  // @patch('/users')
-  // @response(200, {
-  //   description: 'Users PATCH success count',
-  //   content: {'application/json': {schema: CountSchema}},
-  // })
-  // async updateAll(
-  //   @requestBody({
-  //     content: {
-  //       'application/json': {
-  //         schema: getModelSchemaRef(Users, {partial: true}),
-  //       },
-  //     },
-  //   })
-  //   users: Users,
-  //   @param.where(Users) where?: Where<Users>,
-  // ): Promise<Count> {
-  //   return this.usersRepository.updateAll(users, where);
-  // }
 
   @get('/users/{id}')
   @response(200, {
@@ -200,8 +211,25 @@ export class UsersController {
       },
     })
     users: Users,
-  ): Promise<void> {
-    await this.usersRepository.updateById(id, users);
+  ): Promise<CustomResponse> {
+    const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+
+    try {
+      if (!users.firstName) throw new Error('First name is required');
+      if (!users.lastName) throw new Error('Last name is required');
+      if (!users.email) throw new Error('Email is required');
+      if (!emailPattern.test(users.email)) throw new Error('Email is invalid');
+
+      await this.usersRepository.updateById(id, users);
+
+      return {
+        data: [],
+        status: true,
+        message: 'User is edited',
+      };
+    } catch (err) {
+      return {data: [], status: false, message: err.message};
+    }
   }
 
   // @put('/users/{id}')
@@ -215,11 +243,11 @@ export class UsersController {
   //   await this.usersRepository.replaceById(id, users);
   // }
 
-  // @del('/users/{id}')
-  // @response(204, {
-  //   description: 'Users DELETE success',
-  // })
-  // async deleteById(@param.path.string('id') id: string): Promise<void> {
-  //   await this.usersRepository.deleteById(id);
-  // }
+  @del('/users/{id}')
+  @response(204, {
+    description: 'Users DELETE success',
+  })
+  async deleteById(@param.path.string('id') id: string): Promise<void> {
+    await this.usersRepository.deleteById(id);
+  }
 }
