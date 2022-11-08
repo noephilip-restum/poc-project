@@ -30,6 +30,21 @@ export const getActors = createAsyncThunk<
   return response.data as Actor[];
 });
 
+export const getSearchActors = createAsyncThunk<
+  Actor[],
+  { name: string },
+  { rejectValue: returnError }
+>("actors/search/fetch", async (payload, thunkAPI) => {
+  const response = await apiCall(`/actors/search/${payload.name}`, "GET");
+  if (!response.status) {
+    return thunkAPI.rejectWithValue({
+      message: response.message,
+    });
+  }
+
+  return response.data as Actor[];
+});
+
 export const editActor = createAsyncThunk<
   Actor,
   {
@@ -55,15 +70,9 @@ export const deleteActor = createAsyncThunk<
   Actor,
   {
     id: string;
-    firstName: string;
-    lastName: string;
-    gender: string;
-    age: number;
-    image_link: string;
   },
   { rejectValue: string }
 >("actors/delete", async (payload, thunkAPI) => {
-  console.log(payload);
   const response = await apiCall(`/actors/${payload.id}`, "DELETE", payload);
   if (!response.status) {
     return thunkAPI.rejectWithValue(response.message);
@@ -108,6 +117,21 @@ export const actorSlice = createSlice({
     });
 
     builder.addCase(getActors.rejected, (state, { payload }) => {
+      if (payload) state.error = payload.message;
+      state.status = "idle";
+    });
+
+    builder.addCase(getSearchActors.pending, (state) => {
+      state.status = "loading";
+      state.error = null;
+    });
+
+    builder.addCase(getSearchActors.fulfilled, (state, { payload }) => {
+      state.data = payload;
+      state.status = "idle";
+    });
+
+    builder.addCase(getSearchActors.rejected, (state, { payload }) => {
       if (payload) state.error = payload.message;
       state.status = "idle";
     });

@@ -16,7 +16,12 @@ import { User } from "types/User";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 import { getUsers } from "store/slices/user";
-import { createReview, editReview, getReview } from "store/slices/review";
+import {
+  createReview,
+  deleteReview,
+  editReview,
+  getReview,
+} from "store/slices/review";
 import { getMovies } from "store/slices/movie";
 import { showSuccessAlert, showErrorAlert } from "components/alert";
 import {
@@ -68,7 +73,6 @@ export const ReviewTable = () => {
     let tempReview: any = reviews.find(
       (review) => review.id === value.toString()
     );
-    console.log(tempReview);
     setReview(tempReview);
     setOpen({ ...open, [option]: true });
   };
@@ -80,18 +84,27 @@ export const ReviewTable = () => {
   const handleEditSubmit = () => {
     dispatch(editReview(review))
       .unwrap()
-      .then(() => {
-        showSuccessAlert("Review is successfully edited");
-        setTrigger(!trigger);
-        handleClose();
+      .then((res: any) => {
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          setTrigger(!trigger);
+          handleClose();
+          showSuccessAlert(res.message);
+        }
       })
       .catch((error) => showErrorAlert(error));
   };
 
   const handleDeleteSubmit = () => {
-    // dispatch(deleteActor(actor));
-    setTrigger(!trigger);
-    handleClose();
+    dispatch(deleteReview({ id: review.id }))
+      .unwrap()
+      .then(() => {
+        setTrigger(!trigger);
+        handleClose();
+        showSuccessAlert("Review is deleted");
+      })
+      .catch((error) => showErrorAlert(error));
   };
 
   const handleAddSubmit = () => {
@@ -103,10 +116,14 @@ export const ReviewTable = () => {
     };
     dispatch(createReview(tempReview))
       .unwrap()
-      .then(() => {
-        showSuccessAlert("Review is successfully added");
-        setTrigger(!trigger);
-        handleClose();
+      .then((res: any) => {
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          setTrigger(!trigger);
+          handleClose();
+          showSuccessAlert(res.message);
+        }
       })
       .catch((error) => showErrorAlert(error));
   };
@@ -131,8 +148,8 @@ export const ReviewTable = () => {
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value: number) => {
-          return getUserName(value.toString());
+        customBodyRender: (value: string) => {
+          return getUserName(value);
         },
       },
     },

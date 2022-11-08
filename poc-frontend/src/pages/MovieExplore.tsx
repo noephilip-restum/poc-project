@@ -13,10 +13,11 @@ const MovieExplore = () => {
     dispatch(getMovies());
   }, [dispatch]);
 
-  if (movies) {
-    return <GridPage data={movies} />;
-  }
-  return null;
+  return (
+    <>
+      <GridPage data={movies} />
+    </>
+  );
 };
 
 export default MovieExplore;

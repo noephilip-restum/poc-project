@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useAppDispatch } from "hooks/redux";
 import { signupUser } from "store/slices/user";
-import { showSuccessAlert, showErrorAlert } from "components/alert";
+import { showInfoAlert, showErrorAlert } from "components/alert";
 
 const Copyright = (props: any) => {
   return (
@@ -42,12 +42,17 @@ const SignUp = () => {
       account_role: "user",
       account_status: "pending",
     };
+
     dispatch(signupUser(user))
       .unwrap()
-      .then(() => {
-        showSuccessAlert(
-          "Successfully Registered! Please wait to be accepted.."
-        );
+      .then((res: any) => {
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          showInfoAlert(
+            "Successfully Registered! Please wait to be accepted.."
+          );
+        }
       })
       .catch((error) => showErrorAlert(error));
   };
@@ -69,7 +74,7 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField

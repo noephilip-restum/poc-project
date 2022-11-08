@@ -61,7 +61,7 @@ export const AddEditActorModal = ({
             <Grid item xs={12} sm={6}>
               <FormControl sx={{ minWidth: 268 }}>
                 <InputLabel id="demo-simple-select-helper-label">
-                  Account Status
+                  Gender
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-helper-label"

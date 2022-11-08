@@ -5,10 +5,13 @@ import VideoItemWithHover from "./VideoItemWithHover";
 import ActorAvatar from "./ActorAvatar";
 import { Movie } from "types/Movies";
 import { Actor } from "types/Actor";
+import { useLocation } from "react-router-dom";
+
 interface GridWithInfiniteScrollProps {
   data: Movie[] | Actor[];
 }
 const GridWithInfiniteScroll = ({ data }: GridWithInfiniteScrollProps) => {
+  const location = useLocation();
   return (
     <Container
       maxWidth={false}
@@ -19,10 +22,9 @@ const GridWithInfiniteScroll = ({ data }: GridWithInfiniteScrollProps) => {
         bgcolor: "inherit",
       }}
     >
-      <Typography
-        variant="h5"
-        sx={{ color: "text.primary", mb: 2 }}
-      >{`Movies/Actors`}</Typography>
+      <Typography variant="h5" sx={{ color: "text.primary", mb: 2 }}>
+        {location.pathname === `/browse/movies` ? "All Movies" : "All Actors"}
+      </Typography>
 
       <Grid container spacing={2}>
         {data.map((video: any) => (

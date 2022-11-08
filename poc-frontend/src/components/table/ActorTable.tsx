@@ -59,10 +59,14 @@ export const ActorTable = () => {
   const handleEditSubmit = () => {
     dispatch(editActor(actor))
       .unwrap()
-      .then(() => {
-        showSuccessAlert("Actor is successfully edited");
-        setTrigger(!trigger);
-        handleClose();
+      .then((res: any) => {
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          setTrigger(!trigger);
+          handleClose();
+          showSuccessAlert(res.message);
+        }
       })
       .catch((error) => showErrorAlert(error));
   };
@@ -81,14 +85,16 @@ export const ActorTable = () => {
   const handleAddSubmit = () => {
     dispatch(createActor(actor))
       .unwrap()
-      .then(() => {
-        showSuccessAlert("Actor is successfully added");
-        setTrigger(!trigger);
-        handleClose();
+      .then((res: any) => {
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          setTrigger(!trigger);
+          handleClose();
+          showSuccessAlert(res.message);
+        }
       })
-      .catch((error) => {
-        showErrorAlert(error.message);
-      });
+      .catch((error) => showErrorAlert(error));
   };
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {

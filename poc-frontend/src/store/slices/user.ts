@@ -41,8 +41,23 @@ export const editUser = createAsyncThunk<
   },
   { rejectValue: string }
 >("user/edit", async (payload, thunkAPI) => {
-  console.log(payload);
   const response = await apiCall(`/users/${payload._id}`, "PATCH", payload);
+  if (!response.status) {
+    return thunkAPI.rejectWithValue(response.message);
+  }
+
+  return response.data as User;
+});
+
+export const deleteUser = createAsyncThunk<
+  User,
+  {
+    id: string;
+  },
+  { rejectValue: string }
+>("users/delete", async (payload, thunkAPI) => {
+  console.log(payload);
+  const response = await apiCall(`/users/${payload.id}`, "DELETE", payload);
   if (!response.status) {
     return thunkAPI.rejectWithValue(response.message);
   }
@@ -119,6 +134,19 @@ export const userSlice = createSlice({
 
     builder.addCase(editUser.rejected, (state, { payload }) => {
       if (payload) state.error = payload;
+      state.status = "idle";
+    });
+
+    builder.addCase(deleteUser.pending, (state) => {
+      state.status = "loading";
+      state.error = null;
+    });
+
+    builder.addCase(deleteUser.fulfilled, (state, { payload }) => {
+      state.status = "idle";
+    });
+
+    builder.addCase(deleteUser.rejected, (state, { payload }) => {
       state.status = "idle";
     });
 

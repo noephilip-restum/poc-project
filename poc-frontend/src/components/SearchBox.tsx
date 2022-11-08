@@ -1,5 +1,10 @@
+import { useEffect, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+import { useLocation } from "react-router-dom";
+import { getSearchMovies } from "store/slices/movie";
+import { getSearchActors } from "store/slices/actor";
+import { useAppDispatch } from "hooks/redux";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -33,6 +38,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const SearchBox = () => {
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const [search, setSearch] = useState<string>("");
+
+  useEffect(() => {
+    if (search !== "") {
+      location.pathname === `/browse/movies`
+        ? dispatch(getSearchMovies({ name: search }))
+        : dispatch(getSearchActors({ name: search }));
+    }
+  }, [dispatch, search, location.pathname]);
+
   return (
     <Search>
       <StyledInputBase
@@ -42,6 +59,7 @@ const SearchBox = () => {
           width: "500px",
           padding: "2px 5px 5px",
         }}
+        onChange={(e) => setSearch(e?.target.value)}
       />
     </Search>
   );

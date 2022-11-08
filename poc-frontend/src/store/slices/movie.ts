@@ -37,12 +37,43 @@ export const createMovie = createAsyncThunk<
   return response.data as Movie;
 });
 
+export const deleteMovie = createAsyncThunk<
+  Movie,
+  {
+    id: string;
+  },
+  { rejectValue: string }
+>("movies/delete", async (payload, thunkAPI) => {
+  console.log(payload);
+  const response = await apiCall(`/movies/${payload.id}`, "DELETE", payload);
+  if (!response.status) {
+    return thunkAPI.rejectWithValue(response.message);
+  }
+
+  return response.data as Movie;
+});
+
 export const getMovies = createAsyncThunk<
   Movie[],
   undefined,
   { rejectValue: returnError }
 >("movies/fetch", async (state, thunkAPI) => {
   const response = await apiCall("/movies", "GET");
+  if (!response.status) {
+    return thunkAPI.rejectWithValue({
+      message: response.message,
+    });
+  }
+
+  return response.data as Movie[];
+});
+
+export const getSearchMovies = createAsyncThunk<
+  Movie[],
+  { name: string },
+  { rejectValue: returnError }
+>("movies/search/fetch", async (payload, thunkAPI) => {
+  const response = await apiCall(`/movies/search/${payload.name}`, "GET");
   if (!response.status) {
     return thunkAPI.rejectWithValue({
       message: response.message,
@@ -79,7 +110,6 @@ export const editMovie = createAsyncThunk<
   },
   { rejectValue: string }
 >("movies/edit", async (payload, thunkAPI) => {
-  console.log(payload);
   const response = await apiCall(
     `/movies/${payload.id}`,
     "PATCH",
@@ -91,44 +121,6 @@ export const editMovie = createAsyncThunk<
 
   return response.data as Movie;
 });
-
-// export const loginUser = createAsyncThunk<
-//   User,
-//   {
-//     email: string;
-//     password: string;
-//   },
-//   { rejectValue: string }
-// >("users/login", async (payload, thunkAPI) => {
-//   const response = await apiCall(`/users/login`, "POST", payload);
-//   if (!response.status) {
-//     return thunkAPI.rejectWithValue(response.message);
-//   }
-//   setCookie("token", response.data.token, 3);
-//   localStorage.setItem("loggedIn", parseJwt(getCookie("token")).id);
-
-//   return response.data as User;
-// });
-
-// export const signupUser = createAsyncThunk<
-//   User,
-//   {
-//     firstName: string;
-//     lastName: string;
-//     email: string;
-//     password: string;
-//     account_status: string;
-//     account_role: string;
-//   },
-//   { rejectValue: string }
-// >("users/signup", async (payload, thunkAPI) => {
-//   const response = await apiCall(`/users/signup`, "POST", payload);
-//   if (!response.status) {
-//     return thunkAPI.rejectWithValue(response.message);
-//   }
-
-//   return response.data as User;
-// });
 
 export const movieSlice = createSlice({
   name: "movie",
@@ -150,6 +142,21 @@ export const movieSlice = createSlice({
       state.status = "idle";
     });
 
+    builder.addCase(getSearchMovies.pending, (state) => {
+      state.status = "loading";
+      state.error = null;
+    });
+
+    builder.addCase(getSearchMovies.fulfilled, (state, { payload }) => {
+      state.data = payload;
+      state.status = "idle";
+    });
+
+    builder.addCase(getSearchMovies.rejected, (state, { payload }) => {
+      if (payload) state.error = payload.message;
+      state.status = "idle";
+    });
+
     builder.addCase(createMovie.pending, (state) => {
       state.status = "loading";
       state.error = null;
@@ -160,6 +167,19 @@ export const movieSlice = createSlice({
     });
 
     builder.addCase(createMovie.rejected, (state, { payload }) => {
+      state.status = "idle";
+    });
+
+    builder.addCase(deleteMovie.pending, (state) => {
+      state.status = "loading";
+      state.error = null;
+    });
+
+    builder.addCase(deleteMovie.fulfilled, (state, { payload }) => {
+      state.status = "idle";
+    });
+
+    builder.addCase(deleteMovie.rejected, (state, { payload }) => {
       state.status = "idle";
     });
 

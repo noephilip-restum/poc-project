@@ -23,7 +23,7 @@ import { User } from "types/User";
 import { DialogTitleProps } from "types/Modal";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
-import { getUsers, editUser, signupUser } from "store/slices/user";
+import { getUsers, editUser, signupUser, deleteUser } from "store/slices/user";
 import { showSuccessAlert, showErrorAlert } from "components/alert";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -95,10 +95,25 @@ export const UserTable = () => {
   const handleEditSubmit = () => {
     dispatch(editUser(currentUser))
       .unwrap()
+      .then((res: any) => {
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          setTrigger(!trigger);
+          handleClose();
+          showSuccessAlert(res.message);
+        }
+      })
+      .catch((error) => showErrorAlert(error));
+  };
+
+  const handleDeleteSubmit = () => {
+    dispatch(deleteUser({ id: currentUser._id }))
+      .unwrap()
       .then(() => {
-        showSuccessAlert("User is successfully edited");
         setTrigger(!trigger);
         handleClose();
+        showSuccessAlert("User is deleted");
       })
       .catch((error) => showErrorAlert(error));
   };
@@ -128,10 +143,14 @@ export const UserTable = () => {
 
     dispatch(signupUser(user))
       .unwrap()
-      .then(() => {
-        showSuccessAlert("User is successfully edited");
-        setTrigger(!trigger);
-        handleClose();
+      .then((res: any) => {
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          setTrigger(!trigger);
+          handleClose();
+          showSuccessAlert(res.message);
+        }
       })
       .catch((error) => showErrorAlert(error));
   };
@@ -143,9 +162,6 @@ export const UserTable = () => {
       options: {
         filter: true,
         sort: true,
-        // customBodyRender: (value: String, rowData: any) => {
-        //   return `${value} ${rowData.tableData[0][1]}`;
-        // },
       },
     },
 
@@ -260,7 +276,7 @@ export const UserTable = () => {
         <DialogTitle id="alert-dialog-title">{"Delete this User?"}</DialogTitle>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handleDeleteSubmit} autoFocus>
             Agree
           </Button>
         </DialogActions>
@@ -277,7 +293,7 @@ export const UserTable = () => {
         >
           {open.add ? `Create User` : `Edit User`}
         </BootstrapDialogTitle>
-        <Box component="form" onSubmit={handleSubmit}>
+        <Box component="form" noValidate onSubmit={handleSubmit}>
           <DialogContent dividers>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>

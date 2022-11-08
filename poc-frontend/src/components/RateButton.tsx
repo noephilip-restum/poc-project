@@ -50,9 +50,13 @@ const RateButton = ({ id, sx, ...others }: ButtonProps) => {
     };
     dispatch(createReview(tempReview))
       .unwrap()
-      .then(() => {
-        showInfoAlert("Review is now for review");
-        handleClose();
+      .then((res: any) => {
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          handleClose();
+          showInfoAlert("Review is now for review");
+        }
       })
       .catch((error) => showErrorAlert(error));
   };

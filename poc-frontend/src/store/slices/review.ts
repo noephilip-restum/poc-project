@@ -55,26 +55,20 @@ export const editReview = createAsyncThunk<
   return response.data as Review;
 });
 
-// export const deleteActor = createAsyncThunk<
-//   Actor,
-//   {
-//     id: string;
-//     firstName: string;
-//     lastName: string;
-//     gender: string;
-//     age: number;
-//     image_link: string;
-//   },
-//   { rejectValue: string }
-// >("actors/delete", async (payload, thunkAPI) => {
-//   console.log(payload);
-//   const response = await apiCall(`/actors/${payload.id}`, "DELETE", payload);
-//   if (!response.status) {
-//     return thunkAPI.rejectWithValue(response.message);
-//   }
+export const deleteReview = createAsyncThunk<
+  Review,
+  {
+    id: string;
+  },
+  { rejectValue: string }
+>("review/delete", async (payload, thunkAPI) => {
+  const response = await apiCall(`/reviews/${payload.id}`, "DELETE", payload);
+  if (!response.status) {
+    return thunkAPI.rejectWithValue(response.message);
+  }
 
-//   return response.data as Actor;
-// });
+  return response.data as Review;
+});
 
 export const createReview = createAsyncThunk<
   Review,
@@ -144,19 +138,18 @@ export const reviewSlice = createSlice({
       state.status = "idle";
     });
 
-    // builder.addCase(deleteActor.pending, (state) => {
-    //   state.status = "loading";
-    //   state.error = null;
-    // });
+    builder.addCase(deleteReview.pending, (state) => {
+      state.status = "loading";
+      state.error = null;
+    });
 
-    // builder.addCase(deleteActor.fulfilled, (state, { payload }) => {
-    //   state.status = "idle";
-    // });
+    builder.addCase(deleteReview.fulfilled, (state, { payload }) => {
+      state.status = "idle";
+    });
 
-    // builder.addCase(deleteActor.rejected, (state, { payload }) => {
-    //   if (payload) state.error = payload;
-    //   state.status = "idle";
-    // });
+    builder.addCase(deleteReview.rejected, (state, { payload }) => {
+      state.status = "idle";
+    });
   },
 });
 

@@ -32,7 +32,12 @@ import { Movie } from "types/Movies";
 import { Actor } from "types/Actor";
 import { DialogTitleProps } from "types/Modal";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { createMovie, editMovie, getMovies } from "store/slices/movie";
+import {
+  createMovie,
+  deleteMovie,
+  editMovie,
+  getMovies,
+} from "store/slices/movie";
 import { getActors } from "store/slices/actor";
 import { showSuccessAlert, showErrorAlert } from "components/alert";
 
@@ -151,27 +156,42 @@ export const MovieTable = () => {
   const handleEditSubmit = () => {
     dispatch(editMovie(movie))
       .unwrap()
-      .then(() => {
-        showSuccessAlert("Movie is successfully edited");
-        setTrigger(!trigger);
-        handleClose();
+      .then((res: any) => {
+        console.log(res);
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          setTrigger(!trigger);
+          handleClose();
+          showSuccessAlert(res.message);
+        }
       })
       .catch((error) => showErrorAlert(error));
   };
 
   const handleDeleteSubmit = () => {
-    // dispatch(deleteActor(actor));
-    setTrigger(!trigger);
-    handleClose();
+    dispatch(deleteMovie({ id: movie.id }))
+      .unwrap()
+      .then(() => {
+        setTrigger(!trigger);
+        handleClose();
+        showSuccessAlert("Movie is deleted");
+      })
+      .catch((error) => showErrorAlert(error));
   };
 
   const handleAddSubmit = () => {
     dispatch(createMovie(movie))
       .unwrap()
-      .then(() => {
-        showSuccessAlert("Movie is successfully edited");
-        setTrigger(!trigger);
-        handleClose();
+      .then((res: any) => {
+        console.log(res);
+        if (!res.status) {
+          showErrorAlert(res.message);
+        } else {
+          setTrigger(!trigger);
+          handleClose();
+          showSuccessAlert(res.message);
+        }
       })
       .catch((error) => showErrorAlert(error));
   };
@@ -348,7 +368,7 @@ export const MovieTable = () => {
               <Grid item xs={12} sm={6}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    label="Basic example"
+                    label="Date"
                     value={value}
                     onChange={handleDateChange}
                     renderInput={(params) => <TextField {...params} />}
