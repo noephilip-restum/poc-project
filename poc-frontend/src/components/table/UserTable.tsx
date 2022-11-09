@@ -219,15 +219,19 @@ export const UserTable = () => {
       options: {
         filter: false,
         sort: false,
-        customBodyRender: (value: number) => {
+        customBodyRender: (value: number, dataIndex: any) => {
           return (
             <>
-              <Button onClick={() => handleClickOpen(value, "edit")}>
-                Edit
-              </Button>
-              <Button onClick={() => handleClickOpen(value, "delete")}>
-                Delete
-              </Button>
+              {users[dataIndex.rowIndex].account_role !== "root" ? (
+                <>
+                  <Button onClick={() => handleClickOpen(value, "edit")}>
+                    Edit
+                  </Button>
+                  <Button onClick={() => handleClickOpen(value, "delete")}>
+                    Delete
+                  </Button>
+                </>
+              ) : null}
             </>
           );
         },
@@ -349,39 +353,27 @@ export const UserTable = () => {
                     value={currentUser.account_status}
                   >
                     <MenuItem value={"Active"}>Active</MenuItem>
-                    <MenuItem value={"Pending" || "pending"}>Pending</MenuItem>
+                    <MenuItem value={"pending"}>Pending</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                {open.add ? (
-                  <FormControl sx={{ minWidth: 260 }}>
-                    <InputLabel id="demo-simple-select-helper-label">
-                      Account Role
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-helper-label"
-                      id="demo-simple-helper"
-                      label="Account Role"
-                      name="account_role"
-                      onChange={handleChange}
-                      value={currentUser.account_role}
-                    >
-                      <MenuItem value={"user"}>User</MenuItem>
-                      <MenuItem value={"admin"}>Admin</MenuItem>
-                    </Select>
-                  </FormControl>
-                ) : (
-                  <TextField
-                    required
-                    fullWidth
-                    disabled
-                    label="Account Type"
-                    name="account_type"
-                    onChange={changeHandler}
+                <FormControl sx={{ minWidth: 260 }}>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    Account Role
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-helper-label"
+                    id="demo-simple-helper"
+                    label="Account Role"
+                    name="account_role"
+                    onChange={handleChange}
                     value={currentUser.account_role}
-                  />
-                )}
+                  >
+                    <MenuItem value={"user"}>User</MenuItem>
+                    <MenuItem value={"admin"}>Admin</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
               {open.add && (
                 <>

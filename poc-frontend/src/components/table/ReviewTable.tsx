@@ -198,7 +198,7 @@ export const ReviewTable = () => {
         filter: true,
         sort: false,
         customBodyRender: (value: String) => {
-          return <Chip label={value ? "True" : "False"} />;
+          return <Chip label={value ? "Approved" : "For Review"} />;
         },
       },
     },

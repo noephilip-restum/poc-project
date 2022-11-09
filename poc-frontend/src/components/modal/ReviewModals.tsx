@@ -87,8 +87,8 @@ export const AddEditReviewModal = ({
                   onChange={handleChange}
                   value={review.review_status ? "True" : "False"}
                 >
-                  <MenuItem value={"True"}>True</MenuItem>
-                  <MenuItem value={"False"}>False</MenuItem>
+                  <MenuItem value={"True"}>Approved</MenuItem>
+                  <MenuItem value={"False"}>For Review</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

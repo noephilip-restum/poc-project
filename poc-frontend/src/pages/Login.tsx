@@ -26,27 +26,34 @@ const Login = () => {
       email: data.get("email"),
       password: data.get("password"),
     };
-    dispatch(loginUser(user))
-      .unwrap()
-      .then((res: any) => {
-        localStorage.setItem("loggedIn", JSON.stringify(res.userProfile));
-        if (res.userProfile.account_role.toLocaleLowerCase() === "admin") {
-          navigate("/admin/users");
-        } else {
+    if (!user.email || !user.password) {
+      showInfoAlert("Please leave no empty fields to proceed");
+    } else {
+      dispatch(loginUser(user))
+        .unwrap()
+        .then((res: any) => {
+          localStorage.setItem("loggedIn", JSON.stringify(res.userProfile));
           if (
-            res.userProfile.account_status.toLocaleLowerCase() === "pending"
+            res.userProfile.account_role.toLocaleLowerCase() === "admin" ||
+            res.userProfile.account_role.toLocaleLowerCase() === "root"
           ) {
-            showInfoAlert("Account is pending");
-          } else if (
-            res.userProfile.account_status.toLocaleLowerCase() === "reject"
-          ) {
-            showErrorAlert("Account is disable");
+            navigate("/admin/users");
           } else {
-            navigate("/browse");
+            if (
+              res.userProfile.account_status.toLocaleLowerCase() === "pending"
+            ) {
+              showInfoAlert("Account is pending");
+            } else if (
+              res.userProfile.account_status.toLocaleLowerCase() === "reject"
+            ) {
+              showErrorAlert("Account is disable");
+            } else {
+              navigate("/browse");
+            }
           }
-        }
-      })
-      .catch((error) => showErrorAlert("Invalid Email or Password"));
+        })
+        .catch((error) => showErrorAlert("Invalid Email or Password"));
+    }
   };
 
   return (
@@ -78,7 +85,7 @@ const Login = () => {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1 }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -87,7 +94,6 @@ const Login = () => {
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
-              required
               fullWidth
               label="Email Address"
               name="email"
@@ -97,7 +103,6 @@ const Login = () => {
             />
             <TextField
               margin="normal"
-              required
               fullWidth
               name="password"
               label="Password"
@@ -109,6 +114,7 @@ const Login = () => {
               type="submit"
               fullWidth
               variant="contained"
+              color="error"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
