@@ -13,13 +13,14 @@ import MenuItem from "@mui/material/MenuItem";
 import SearchBox from "./SearchBox";
 import useOffSetTop from "hooks/useOffSetTop";
 import NetflixNavigationLink from "./NetflixNavigationLink";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { deleteCookie } from "utils/main";
 
 const pages = ["Home", "Actors"];
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const isOffset = useOffSetTop(100);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -112,8 +113,8 @@ const Header = () => {
         </Stack>
 
         <Box sx={{ flexGrow: 0, display: "flex", gap: 2 }}>
-          <SearchBox />
-          {localStorage.getItem("loggedIn") && (
+          {location.pathname !== `/browse` && <SearchBox />}
+          {localStorage.getItem("loggedIn") ? (
             <>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -146,6 +147,12 @@ const Header = () => {
                 </MenuItem>
               </Menu>
             </>
+          ) : (
+            <Tooltip title="Login">
+              <IconButton onClick={() => navigate("/login")} sx={{ p: 0 }}>
+                <Avatar src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
           )}
         </Box>
       </Toolbar>

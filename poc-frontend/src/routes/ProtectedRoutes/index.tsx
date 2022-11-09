@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 const useAuth = () => {
-  const user = localStorage.getItem("loggedIn");
-  if (user) {
+  const userJson = localStorage.getItem("loggedIn");
+  let user = userJson !== null ? JSON.parse(userJson) : {};
+  if (userJson && user.account_role === "admin") {
     return true;
   } else {
     return false;

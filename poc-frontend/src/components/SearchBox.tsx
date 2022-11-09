@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import { useLocation } from "react-router-dom";
-import { getSearchMovies } from "store/slices/movie";
-import { getSearchActors } from "store/slices/actor";
+import { getSearchMovies, getMovies } from "store/slices/movie";
+import { getSearchActors, getActors } from "store/slices/actor";
 import { useAppDispatch } from "hooks/redux";
 
 const Search = styled("div")(({ theme }) => ({
@@ -47,6 +47,10 @@ const SearchBox = () => {
       location.pathname === `/browse/movies`
         ? dispatch(getSearchMovies({ name: search }))
         : dispatch(getSearchActors({ name: search }));
+    } else {
+      location.pathname === `/browse/movies`
+        ? dispatch(getMovies())
+        : dispatch(getActors());
     }
   }, [dispatch, search, location.pathname]);
 

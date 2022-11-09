@@ -18,16 +18,6 @@ export const apiCall = async (url: String, method: String, data?: any) => {
   return response;
 };
 
-export const validateEmail = (email: String) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    )
-    ? true
-    : false;
-};
-
 export const padTo2Digits = (num: Number) => {
   return num.toString().padStart(2, "0");
 };
@@ -97,8 +87,8 @@ export const parseJwt = (token: any) => {
 export const getCookie = (name: String) => {
   let nameEQ = name + "=";
   let ca = document.cookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
+  for (const element of ca) {
+    let c = element;
     while (c.charAt(0) === " ") c = c.substring(1, c.length);
     if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
   }
@@ -107,7 +97,7 @@ export const getCookie = (name: String) => {
 
 /**
  * Deletion of cookie from the browser
- * @param {email}
+ * @param {name}
  * @return
  */
 export const deleteCookie = (name: String) => {

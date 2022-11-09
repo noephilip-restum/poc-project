@@ -9,8 +9,10 @@ import AddIcon from "@mui/icons-material/Add";
 import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import { Actor } from "types/Actor";
+import { Movie } from "types/Movies";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { getMovies } from "store/slices/movie";
 import {
   getActors,
   editActor,
@@ -26,6 +28,7 @@ import { showSuccessAlert, showErrorAlert } from "components/alert";
 export const ActorTable = () => {
   const dispatch = useAppDispatch();
   const actors = useAppSelector((state) => state.actors.data as Actor[]);
+  const movies = useAppSelector((state) => state.movies.data as Movie[]);
   const [actor, setActor] = React.useState({
     id: "",
     firstName: "",
@@ -45,6 +48,10 @@ export const ActorTable = () => {
     dispatch(getActors());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, trigger]);
+
+  useEffect(() => {
+    dispatch(getMovies());
+  }, [dispatch]);
 
   const handleClickOpen = async (value: Number, option: any) => {
     let tempActor: any = actors.find((actor) => actor.id === value.toString());
@@ -72,14 +79,20 @@ export const ActorTable = () => {
   };
 
   const handleDeleteSubmit = () => {
-    dispatch(deleteActor(actor))
-      .unwrap()
-      .then(() => {
-        showSuccessAlert("Actor is successfully deleted");
-        setTrigger(!trigger);
-        handleClose();
-      })
-      .catch((error) => showErrorAlert(error));
+    let checkActor = movies.map((movie) =>
+      movie.actors?.find((data) => data.id === actor.id)
+    );
+    checkActor = checkActor.filter((item) => !!item);
+    checkActor.length === 0
+      ? dispatch(deleteActor(actor))
+          .unwrap()
+          .then(() => {
+            showSuccessAlert("Actor is successfully deleted");
+            setTrigger(!trigger);
+            handleClose();
+          })
+          .catch((error) => showErrorAlert(error))
+      : showErrorAlert("Actor is casted to movies");
   };
 
   const handleAddSubmit = () => {

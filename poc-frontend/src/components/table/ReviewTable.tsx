@@ -9,7 +9,6 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
-
 import { Review } from "types/Review";
 import { Movie } from "types/Movies";
 import { User } from "types/User";
@@ -141,6 +140,11 @@ export const ReviewTable = () => {
     return `${tempUser?.firstName} ${tempUser?.lastName}`;
   };
 
+  const getMovieTitle = (id: string) => {
+    let tempMovie = movies.find((movie) => movie.id === id);
+    return tempMovie && tempMovie.title;
+  };
+
   const columns = [
     {
       name: "usersId",
@@ -150,6 +154,17 @@ export const ReviewTable = () => {
         sort: true,
         customBodyRender: (value: string) => {
           return getUserName(value);
+        },
+      },
+    },
+    {
+      name: "movieId",
+      label: "Movie",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value: string) => {
+          return getMovieTitle(value);
         },
       },
     },
@@ -178,7 +193,7 @@ export const ReviewTable = () => {
     },
     {
       name: "review_status",
-      label: "Review Status",
+      label: "Status",
       options: {
         filter: true,
         sort: false,

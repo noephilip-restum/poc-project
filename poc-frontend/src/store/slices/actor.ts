@@ -57,7 +57,6 @@ export const editActor = createAsyncThunk<
   },
   { rejectValue: string }
 >("actors/edit", async (payload, thunkAPI) => {
-  console.log(payload);
   const response = await apiCall(`/actors/${payload.id}`, "PATCH", payload);
   if (!response.status) {
     return thunkAPI.rejectWithValue(response.message);
