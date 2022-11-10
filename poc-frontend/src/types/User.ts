@@ -1,10 +1,10 @@
 export type User = {
-  _id: String;
-  firstName: String;
-  lastName: String;
-  email: String;
-  account_status: String;
-  account_role: String;
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  account_status: string;
+  account_role: string;
 };
 
 export type returnError = {

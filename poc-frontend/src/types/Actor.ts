@@ -1,10 +1,10 @@
 export type Actor = {
-  id: String;
-  firstName: String;
-  lastName: String;
-  gender: String;
-  age: Number;
-  image_link: String;
+  id: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  age: number;
+  image_link: string;
 };
 
 export type returnError = {

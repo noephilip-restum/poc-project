@@ -37,20 +37,22 @@ interface IReview {
   usersId: "";
 }
 
+const reviewState: IReview = {
+  id: "",
+  message: "",
+  rating: 0,
+  review_status: true,
+  movieId: "",
+  usersId: "",
+};
+
 export const ReviewTable = () => {
   const dispatch = useAppDispatch();
   const reviews = useAppSelector((state) => state.reviews.data as Review[]);
   const movies = useAppSelector((state) => state.movies.data as Movie[]);
   const users = useAppSelector((state) => state.users.data as User[]);
-  const [review, setReview] = React.useState<IReview>({
-    id: "",
-    message: "",
-    rating: 0,
-    review_status: true,
-    movieId: "",
-    usersId: "",
-  });
-  const [trigger, setTrigger] = React.useState(false as Boolean);
+  const [review, setReview] = React.useState<IReview>(reviewState);
+  const [trigger, setTrigger] = React.useState(false as boolean);
   const [open, setOpen] = React.useState({
     edit: false,
     delete: false,
@@ -68,7 +70,7 @@ export const ReviewTable = () => {
     dispatch(getUsers());
   }, [dispatch]);
 
-  const handleClickOpen = async (value: Number, option: any) => {
+  const handleClickOpen = async (value: number, option: any) => {
     let tempReview: any = reviews.find(
       (review) => review.id === value.toString()
     );
@@ -197,7 +199,7 @@ export const ReviewTable = () => {
       options: {
         filter: true,
         sort: false,
-        customBodyRender: (value: String) => {
+        customBodyRender: (value: string) => {
           return <Chip label={value ? "Approved" : "For Review"} />;
         },
       },
@@ -236,7 +238,12 @@ export const ReviewTable = () => {
             <MUIDataTable
               title={
                 <Box>
-                  <IconButton onClick={() => setOpen({ ...open, add: true })}>
+                  <IconButton
+                    onClick={() => {
+                      setReview(reviewState);
+                      setOpen({ ...open, add: true });
+                    }}
+                  >
                     <Tooltip title="Add Review">
                       <AddIcon
                         sx={{ color: "white", fontSize: { xs: 14, sm: 28 } }}

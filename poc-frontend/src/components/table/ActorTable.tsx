@@ -25,19 +25,21 @@ import {
 } from "components/modal/ActorModals";
 import { showSuccessAlert, showErrorAlert } from "components/alert";
 
+const actorState: Actor = {
+  id: "",
+  firstName: "",
+  lastName: "",
+  gender: "",
+  age: 0,
+  image_link: "",
+};
+
 export const ActorTable = () => {
   const dispatch = useAppDispatch();
   const actors = useAppSelector((state) => state.actors.data as Actor[]);
   const movies = useAppSelector((state) => state.movies.data as Movie[]);
-  const [actor, setActor] = React.useState({
-    id: "",
-    firstName: "",
-    lastName: "",
-    gender: "",
-    age: 0,
-    image_link: "",
-  });
-  const [trigger, setTrigger] = React.useState(false as Boolean);
+  const [actor, setActor] = React.useState<Actor>(actorState);
+  const [trigger, setTrigger] = React.useState(false as boolean);
   const [open, setOpen] = React.useState({
     edit: false,
     delete: false,
@@ -53,7 +55,7 @@ export const ActorTable = () => {
     dispatch(getMovies());
   }, [dispatch]);
 
-  const handleClickOpen = async (value: Number, option: any) => {
+  const handleClickOpen = async (value: number, option: any) => {
     let tempActor: any = actors.find((actor) => actor.id === value.toString());
     setActor(tempActor);
     setOpen({ ...open, [option]: true });
@@ -129,7 +131,7 @@ export const ActorTable = () => {
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value: String) => {
+        customBodyRender: (value: string) => {
           return (
             <>
               <Avatar src={`${value}`} />
@@ -202,7 +204,12 @@ export const ActorTable = () => {
             <MUIDataTable
               title={
                 <Box>
-                  <IconButton onClick={() => setOpen({ ...open, add: true })}>
+                  <IconButton
+                    onClick={() => {
+                      setActor(actorState);
+                      setOpen({ ...open, add: true });
+                    }}
+                  >
                     <Tooltip title="Add an actor">
                       <AddIcon
                         sx={{ color: "white", fontSize: { xs: 14, sm: 28 } }}

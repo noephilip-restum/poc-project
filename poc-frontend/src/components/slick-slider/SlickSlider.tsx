@@ -135,7 +135,7 @@ const SlickSlider = () => {
 
   return (
     <Box sx={{ overflow: "hidden", height: "100%", zIndex: 1 }}>
-      {movies.length && (
+      {movies.length !== 0 && (
         <>
           <Stack
             spacing={2}
@@ -189,8 +189,6 @@ const SlickSlider = () => {
                 {movies.map((item) => (
                   <SlideItem key={item.id} item={item} />
                 ))}
-
-                {/* <SlideItem  /> */}
               </StyledSlider>
             </CustomNavigation>
           </RootStyle>

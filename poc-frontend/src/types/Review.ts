@@ -1,10 +1,10 @@
 export type Review = {
-  id: String;
-  message: String;
+  id: string;
+  message: string;
   rating: number;
-  review_status: Boolean;
-  movieId: String;
-  usersId: String;
+  review_status: boolean;
+  movieId: string;
+  usersId: string;
 };
 
 export type returnError = {

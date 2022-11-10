@@ -4,7 +4,7 @@ const useOffSetTop = (top: number) => {
   const [offsetTop, setOffSetTop] = useState(false);
   useEffect(() => {
     window.onscroll = () => {
-      if (window.pageYOffset > top) {
+      if (window.scrollY > top) {
         setOffSetTop(true);
       } else {
         setOffSetTop(false);

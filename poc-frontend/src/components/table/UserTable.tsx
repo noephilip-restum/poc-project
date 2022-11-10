@@ -70,7 +70,7 @@ export const UserTable = () => {
     account_role: "",
     account_status: "",
   });
-  const [trigger, setTrigger] = React.useState(false as Boolean);
+  const [trigger, setTrigger] = React.useState(false as boolean);
   const [open, setOpen] = React.useState({
     edit: false,
     delete: false,
@@ -82,7 +82,7 @@ export const UserTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, trigger]);
 
-  const handleClickOpen = async (value: Number, option: any) => {
+  const handleClickOpen = async (value: number, option: any) => {
     let tempUser: any = users.find((user) => user._id === value.toString());
     setCurrentUser(tempUser);
     setOpen({ ...open, [option]: true });
@@ -129,6 +129,11 @@ export const UserTable = () => {
     setCurrentUser({ ...currentUser, [event.target.name]: event.target.value });
   };
 
+  const getUserFullName = (id: string) => {
+    let user = users.find((user) => user._id === id);
+    return user && `${user?.firstName} ${user?.lastName}`;
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -157,18 +162,15 @@ export const UserTable = () => {
 
   const columns = [
     {
-      name: "firstName",
-      label: "First Name",
+      name: "_id",
+      label: "Name",
       options: {
         filter: true,
         sort: true,
+        customBodyRender: (value: string) => {
+          return getUserFullName(value);
+        },
       },
-    },
-
-    {
-      name: "lastName",
-      label: "Last Name",
-      options: { filter: true, sort: true },
     },
     {
       name: "email",
@@ -184,13 +186,13 @@ export const UserTable = () => {
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value: String) => {
+        customBodyRender: (value: string) => {
           return (
             <>
-              {value.toLocaleLowerCase() === "pending" ? (
-                <Chip label={value.toLocaleUpperCase()} color="primary" />
+              {value === "pending" ? (
+                <Chip label={value.toUpperCase()} color="primary" />
               ) : (
-                <Chip label={value.toLocaleUpperCase()} color="success" />
+                <Chip label={value.toUpperCase()} color="success" />
               )}
             </>
           );
@@ -203,10 +205,10 @@ export const UserTable = () => {
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value: String) => {
+        customBodyRender: (value: string) => {
           return (
             <>
-              <Chip label={value} variant="outlined" />
+              <Chip label={value.toUpperCase()} />
             </>
           );
         },

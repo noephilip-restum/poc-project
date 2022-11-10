@@ -82,6 +82,17 @@ interface IMovie {
   actorIds: string[];
   image_link: string;
 }
+
+const movieState: IMovie = {
+  id: "",
+  title: "",
+  description: "",
+  year_of_release: "",
+  cost: 0,
+  actorIds: [],
+  image_link: "",
+};
+
 export const MovieTable = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -89,16 +100,8 @@ export const MovieTable = () => {
   const actors = useAppSelector((state) => state.actors.data as Actor[]);
   const [personName, setPersonName] = React.useState<string[]>([]);
   const [value, setValue] = React.useState<Dayjs | null>();
-  const [movie, setMovie] = React.useState<IMovie>({
-    id: "",
-    title: "",
-    description: "",
-    year_of_release: "",
-    cost: 0,
-    actorIds: [],
-    image_link: "",
-  });
-  const [trigger, setTrigger] = React.useState(false as Boolean);
+  const [movie, setMovie] = React.useState<IMovie>(movieState);
+  const [trigger, setTrigger] = React.useState(false as boolean);
   const [open, setOpen] = React.useState({
     edit: false,
     delete: false,
@@ -139,7 +142,7 @@ export const MovieTable = () => {
     let tempActor = actors.find((actor) => actor.id === id.toString());
     return `${tempActor?.firstName} ${tempActor?.lastName}`;
   };
-  const handleClickOpen = async (value: Number, option: any) => {
+  const handleClickOpen = async (value: number, option: any) => {
     let tempMovie: any = movies.find((movie) => movie.id === value.toString());
     let tempActor: any = tempMovie.actors.map((actor: any) => {
       return actor.id;
@@ -239,7 +242,7 @@ export const MovieTable = () => {
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value: String) => {
+        customBodyRender: (value: string) => {
           return (
             <>
               <Avatar src={`${value}`} sx={{ width: 120, height: 120 }} />
@@ -303,8 +306,13 @@ export const MovieTable = () => {
             <MUIDataTable
               title={
                 <Box>
-                  <IconButton onClick={() => setOpen({ ...open, add: true })}>
-                    <Tooltip title="Add an actor">
+                  <IconButton
+                    onClick={() => {
+                      setMovie(movieState);
+                      setOpen({ ...open, add: true });
+                    }}
+                  >
+                    <Tooltip title="Add movie">
                       <AddIcon
                         sx={{ color: "white", fontSize: { xs: 14, sm: 28 } }}
                       />

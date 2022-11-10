@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const apiCall = async (url: String, method: String, data?: any) => {
+export const apiCall = async (url: string, method: string, data?: any) => {
   let response = [];
   let token = getCookie("token");
   let baseUrl = "http://localhost:3000";
@@ -18,7 +18,7 @@ export const apiCall = async (url: String, method: String, data?: any) => {
   return response;
 };
 
-export const padTo2Digits = (num: Number) => {
+export const padTo2Digits = (num: number) => {
   return num.toString().padStart(2, "0");
 };
 
@@ -48,7 +48,7 @@ export const formatDate = (date: any) => {
  * @param {name, value, days}
  * @return
  */
-export const setCookie = (name: String, value: String, days: any) => {
+export const setCookie = (name: string, value: string, days: any) => {
   let expires = "";
   if (days) {
     let date = new Date();
@@ -84,7 +84,7 @@ export const parseJwt = (token: any) => {
  * @param {name}
  * @return
  */
-export const getCookie = (name: String) => {
+export const getCookie = (name: string) => {
   let nameEQ = name + "=";
   let ca = document.cookie.split(";");
   for (const element of ca) {
@@ -100,7 +100,7 @@ export const getCookie = (name: String) => {
  * @param {name}
  * @return
  */
-export const deleteCookie = (name: String) => {
+export const deleteCookie = (name: string) => {
   localStorage.removeItem("loggedIn");
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 };
