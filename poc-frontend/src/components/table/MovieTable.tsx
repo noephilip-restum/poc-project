@@ -439,7 +439,7 @@ export const MovieTable = () => {
                       <MenuItem
                         key={actor.image_link}
                         value={actor.id}
-                        style={getStyles(
+                        sx={getStyles(
                           `${actor.firstName} ${actor.lastName}`,
                           personName,
                           theme

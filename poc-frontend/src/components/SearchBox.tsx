@@ -59,7 +59,7 @@ const SearchBox = () => {
       <StyledInputBase
         placeholder="Search…"
         inputProps={{ "aria-label": "search" }}
-        style={{
+        sx={{
           width: "500px",
           padding: "2px 5px 5px",
         }}

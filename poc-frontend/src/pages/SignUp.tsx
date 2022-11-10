@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,10 +9,11 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useAppDispatch } from "hooks/redux";
-import { signupUser } from "store/slices/user";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { User } from "types/User";
+import { getUsers, signupUser } from "store/slices/user";
 import { showInfoAlert, showErrorAlert } from "components/alert";
-
+import { adminAccount } from "constant";
 const Copyright = (props: any) => {
   return (
     <Typography
@@ -30,6 +31,15 @@ const Copyright = (props: any) => {
 
 const SignUp = () => {
   const dispatch = useAppDispatch();
+  const users = useAppSelector((state) => state.users.data as User[]);
+
+  useEffect(() => {
+    if (users.length === 0) {
+      dispatch(signupUser(adminAccount));
+    }
+    dispatch(getUsers());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,7 +66,6 @@ const SignUp = () => {
       })
       .catch((error) => showErrorAlert(error));
   };
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
