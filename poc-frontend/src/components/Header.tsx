@@ -102,7 +102,7 @@ const Header = () => {
         >
           {pages.map((page) => (
             <NetflixNavigationLink
-              to={page === "Actors" ? "/browse/actors" : "/"}
+              to={page === "Actors" ? "/browse/actors" : "/browse"}
               variant="subtitle1"
               key={page}
               onClick={handleCloseNavMenu}

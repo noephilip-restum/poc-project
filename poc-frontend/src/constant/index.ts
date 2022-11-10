@@ -5,6 +5,6 @@ export const adminAccount = {
   lastName: "admin",
   email: "admin@mail.com",
   password: "admin",
-  account_role: "admin",
+  account_role: "root",
   account_status: "active",
 };

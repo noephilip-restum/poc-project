@@ -38,8 +38,8 @@ const MovieBanner = () => {
 
   useEffect(() => {
     dispatch(getMovies());
-    setMovieId(null);
-  }, [dispatch, setMovieId]);
+    // eslint-disable-next-line
+  }, [dispatch]);
 
   const getRandomMovie = () => {
     let randomMovie = movies[getRandomNumber(movies.length)];

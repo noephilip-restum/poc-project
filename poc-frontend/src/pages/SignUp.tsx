@@ -14,6 +14,8 @@ import { User } from "types/User";
 import { getUsers, signupUser } from "store/slices/user";
 import { showInfoAlert, showErrorAlert } from "components/alert";
 import { adminAccount } from "constant";
+import { useNavigate } from "react-router-dom";
+
 const Copyright = (props: any) => {
   return (
     <Typography
@@ -30,6 +32,7 @@ const Copyright = (props: any) => {
 };
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const users = useAppSelector((state) => state.users.data as User[]);
 
@@ -59,6 +62,7 @@ const SignUp = () => {
         if (!res.status) {
           showErrorAlert(res.message);
         } else {
+          navigate("/login");
           showInfoAlert(
             "Successfully Registered! Please wait to be accepted.."
           );
