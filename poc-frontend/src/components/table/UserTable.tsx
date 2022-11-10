@@ -59,17 +59,19 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
+const userState: User = {
+  _id: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  account_role: "",
+  account_status: "",
+};
+
 export const UserTable = () => {
   const dispatch = useAppDispatch();
   const users = useAppSelector((state) => state.users.data as User[]);
-  const [currentUser, setCurrentUser] = React.useState({
-    _id: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    account_role: "",
-    account_status: "",
-  });
+  const [currentUser, setCurrentUser] = React.useState(userState);
   const [trigger, setTrigger] = React.useState(false as boolean);
   const [open, setOpen] = React.useState({
     edit: false,
@@ -253,7 +255,12 @@ export const UserTable = () => {
             <MUIDataTable
               title={
                 <Box>
-                  <IconButton onClick={() => setOpen({ ...open, add: true })}>
+                  <IconButton
+                    onClick={() => {
+                      setCurrentUser(userState);
+                      setOpen({ ...open, add: true });
+                    }}
+                  >
                     <Tooltip title="Add an actor">
                       <AddIcon
                         sx={{ color: "white", fontSize: { xs: 14, sm: 28 } }}

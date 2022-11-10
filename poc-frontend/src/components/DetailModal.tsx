@@ -159,7 +159,7 @@ export default function DetailModal() {
                 </MaxLineTypography>
                 <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
                   {localStorage.getItem("loggedIn") && (
-                    <RateButton id={detail.id} sx={{ color: "black", py: 0 }} />
+                    <RateButton movie={detail} sx={{ color: "black", py: 0 }} />
                   )}
 
                   <Box flexGrow={1} />

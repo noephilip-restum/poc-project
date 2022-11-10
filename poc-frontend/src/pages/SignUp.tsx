@@ -84,7 +84,6 @@ const SignUp = () => {
                 fullWidth
                 id="firstName"
                 label="First Name"
-                helperText={"First Name is required"}
                 autoFocus
               />
             </Grid>

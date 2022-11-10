@@ -42,7 +42,6 @@ export const editReview = createAsyncThunk<
   },
   { rejectValue: string }
 >("reviews/edit", async (payload, thunkAPI) => {
-  console.log(payload);
   const response = await apiCall(
     `/reviews/${payload.id}`,
     "PATCH",

@@ -38,7 +38,8 @@ const MovieBanner = () => {
 
   useEffect(() => {
     dispatch(getMovies());
-  }, [dispatch]);
+    setMovieId(null);
+  }, [dispatch, setMovieId]);
 
   const getRandomMovie = () => {
     let randomMovie = movies[getRandomNumber(movies.length)];
@@ -149,7 +150,7 @@ const MovieBanner = () => {
               </MaxLineTypography>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 {localStorage.getItem("loggedIn") && (
-                  <RateButton size="large" id={movie.id} />
+                  <RateButton size="large" movie={movie} />
                 )}
                 <MoreInfoButton
                   size="large"
