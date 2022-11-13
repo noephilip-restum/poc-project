@@ -40,7 +40,6 @@ const CredentialsSchema: SchemaObject = {
     },
     password: {
       type: 'string',
-      minLength: 8,
     },
   },
 };
@@ -87,11 +86,8 @@ export class UsersController {
   async login(
     @requestBody(CredentialsRequestBody) credentials: Credentials,
   ): Promise<{token: string; userProfile: any}> {
-    // ensure the user exists, and the password is correct
     const user = await this.userService.verifyCredentials(credentials);
-    // convert a User object into a UserProfile object (reduced set of properties)
     const userProfile = this.userService.convertToUserProfile(user);
-    // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);
     return {token, userProfile};
   }
@@ -154,15 +150,6 @@ export class UsersController {
       return {data: [], status: false, message: err.message};
     }
   }
-
-  // @get('/users/count')
-  // @response(200, {
-  //   description: 'Users model count',
-  //   content: {'application/json': {schema: CountSchema}},
-  // })
-  // async count(@param.where(Users) where?: Where<Users>): Promise<Count> {
-  //   return this.usersRepository.count(where);
-  // }
 
   @get('/users')
   @response(200, {
@@ -231,17 +218,6 @@ export class UsersController {
       return {data: [], status: false, message: err.message};
     }
   }
-
-  // @put('/users/{id}')
-  // @response(204, {
-  //   description: 'Users PUT success',
-  // })
-  // async replaceById(
-  //   @param.path.string('id') id: string,
-  //   @requestBody() users: Users,
-  // ): Promise<void> {
-  //   await this.usersRepository.replaceById(id, users);
-  // }
 
   @del('/users/{id}')
   @response(204, {

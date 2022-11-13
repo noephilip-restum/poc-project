@@ -1,21 +1,13 @@
-import {PocBackendApplication} from '../..';
 import {
+  Client,
   createRestAppClient,
   givenHttpServerConfig,
-  Client,
 } from '@loopback/testlab';
+import {PocBackendApplication} from '../..';
 
 export async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({
-    // Customize the server configuration here.
-    // Empty values (undefined, '') will be ignored by the helper.
-    //
-    // host: process.env.HOST,
-    // port: +process.env.PORT,
-  });
-
   const app = new PocBackendApplication({
-    rest: restConfig,
+    rest: givenHttpServerConfig(),
   });
 
   await app.boot();
