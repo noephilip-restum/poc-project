@@ -13,6 +13,8 @@ import { createReview } from "store/slices/review";
 import { useAppDispatch } from "hooks/redux";
 import { showInfoAlert, showErrorAlert } from "components/alert";
 import { Review } from "types/Review";
+import { useDetailModal } from "providers/DetailModalProvider";
+import { getMovies } from "store/slices/movie";
 
 interface IReview {
   id: string;
@@ -27,19 +29,21 @@ const reviewState: IReview = {
   id: "",
   message: "",
   rating: 0,
-  review_status: true,
+  review_status: false,
   movieId: "",
   usersId: "",
 };
 
 const RateButton = ({ movie, sx, ...others }: ButtonProps | any) => {
   const dispatch = useAppDispatch();
+  const { onClose } = useDetailModal();
   const [open, setOpen] = React.useState({
     add: false,
   });
   const [review, setReview] = React.useState<IReview>(reviewState);
 
   const handleClose = () => {
+    dispatch(getMovies());
     setOpen({ add: false });
   };
 
@@ -57,13 +61,13 @@ const RateButton = ({ movie, sx, ...others }: ButtonProps | any) => {
         movieId: movie?.id?.toString(),
         usersId: user._id,
       };
-
       dispatch(createReview(tempReview))
         .unwrap()
         .then((res: any) => {
           if (!res.status) {
             showErrorAlert(res.message);
           } else {
+            onClose();
             handleClose();
             showInfoAlert("Review is now for review");
           }

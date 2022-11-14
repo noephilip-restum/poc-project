@@ -125,7 +125,11 @@ export const editMovie = createAsyncThunk<
 export const movieSlice = createSlice({
   name: "movie",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCurrentMovie(state) {
+      state.currentMovie = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getMovies.pending, (state) => {
       state.status = "loading";
@@ -211,5 +215,5 @@ export const movieSlice = createSlice({
     });
   },
 });
-
+export const { clearCurrentMovie } = movieSlice.actions;
 export default movieSlice.reducer;

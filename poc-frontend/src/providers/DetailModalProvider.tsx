@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import createSafeContext from "lib/createSafeContext";
-import { getMovieById } from "store/slices/movie";
+import { clearCurrentMovie, getMovieById } from "store/slices/movie";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 export interface DetailModalConsumerProps {
   detail: any | null;
@@ -27,8 +27,10 @@ export default function DetailModalProvider({
   const location = useLocation();
 
   const handleClose = () => {
+    dispatch(clearCurrentMovie());
     setDetail(null);
     setDetailId(null);
+    console.log("here");
   };
 
   const handleChangeVideoId = (id: string | null) => {

@@ -16,7 +16,7 @@ import NetflixNavigationLink from "./NetflixNavigationLink";
 import { useNavigate, useLocation } from "react-router-dom";
 import { deleteCookie } from "utils/main";
 
-const pages = ["Home", "Actors"];
+const pages = ["Home", "Movies", "Actors"];
 
 const Header = () => {
   const navigate = useNavigate();
@@ -45,6 +45,15 @@ const Header = () => {
     setAnchorElUser(null);
   };
 
+  const getPath = (page: string) => {
+    if (page === "Actors") {
+      return "/browse/actors";
+    } else if (page === "Movies") {
+      return "/browse/movies";
+    } else {
+      return "/browse";
+    }
+  };
   return (
     <AppBar
       sx={{
@@ -102,7 +111,7 @@ const Header = () => {
         >
           {pages.map((page) => (
             <NetflixNavigationLink
-              to={page === "Actors" ? "/browse/actors" : "/browse"}
+              to={getPath(page)}
               variant="subtitle1"
               key={page}
               onClick={handleCloseNavMenu}
