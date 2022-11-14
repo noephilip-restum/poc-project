@@ -1,4 +1,10 @@
-import {Entity, model, property, referencesMany, hasMany} from '@loopback/repository';
+import {
+  Entity,
+  hasMany,
+  model,
+  property,
+  referencesMany,
+} from '@loopback/repository';
 import {Actor} from './actor.model';
 import {Review} from './review.model';
 
@@ -42,7 +48,7 @@ export class Movie extends Entity {
   image_link: string;
 
   @referencesMany(() => Actor)
-  actorIds: string[];
+  actorIds?: string[];
 
   @hasMany(() => Review)
   reviews: Review[];

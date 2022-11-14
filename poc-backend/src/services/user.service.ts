@@ -20,13 +20,6 @@ export type Credentials = {
   password: string;
 };
 
-// interface convertedProfile {
-//   [securityId]: string;
-//   _id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-// }
 export class MyUserService implements UserService<Users, Credentials> {
   constructor(
     @repository(UsersRepository) public userRepository: UsersRepository,
@@ -60,7 +53,7 @@ export class MyUserService implements UserService<Users, Credentials> {
 
     return foundUser;
   }
-
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   convertToUserProfile(user: Users): any {
     const converted = {
       [securityId]: user._id?.toString,

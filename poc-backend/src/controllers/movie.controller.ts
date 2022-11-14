@@ -155,7 +155,6 @@ export class MovieController {
       if (!movie.year_of_release) throw new Error('Date is required');
       if (!movie.cost) throw new Error('Cost is required');
       if (!movie.description) throw new Error('Description is required');
-      if (movie.actorIds.length === 0) throw new Error('Actor/s is required');
       if (!movie.image_link) throw new Error('Image link is required');
 
       await this.movieRepository.updateById(id, movie);

@@ -1,12 +1,10 @@
-import {Client, createRestAppClient, expect} from '@loopback/testlab';
+import {Client, expect} from '@loopback/testlab';
 import {PocBackendApplication} from '../..';
 import {UsersRepository} from '../../repositories';
 import {isNotEmpty, isValidName, validateEmail} from '../../utils';
 import {
   givenRunningApplicationWithCustomConfiguration,
   givenUserRepositories,
-  rootAdminBody,
-  rootAdminUserResponse,
 } from '../helpers';
 
 describe('User Controller', () => {
@@ -22,9 +20,7 @@ describe('User Controller', () => {
   before(async () => {
     ({userRepo} = await givenUserRepositories(app));
   });
-  before(() => {
-    client = createRestAppClient(app);
-  });
+
   beforeEach(async () => {
     await userRepo.deleteAll();
   });
@@ -51,20 +47,5 @@ describe('User Controller', () => {
     const expectedError = 'Field password is required.';
     const password = '';
     expect(() => isNotEmpty(password, 'password')).to.throw(expectedError);
-  });
-
-  describe('Register root admin', () => {
-    it('should register first user/ root', async function () {
-      const rootAdmin = rootAdminBody();
-      const rootAdminRes = rootAdminUserResponse();
-      const response = await client
-        .post('/users/register')
-        .send(rootAdmin)
-        .expect(200);
-      const res = response.body;
-
-      expect(res.role).equal(rootAdminRes.role);
-      expect(res.isActivated).equal(rootAdminRes.isActivated);
-    });
   });
 });

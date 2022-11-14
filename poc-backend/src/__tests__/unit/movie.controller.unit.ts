@@ -24,7 +24,7 @@ describe('MovieController', () => {
       const create = movieRepo.stubs.create;
       create.resolves(aMovieWithId);
       const response = await controller.create(aMovie);
-      expect(response.data).to.eql(aMovieWithId);
+      expect(response.message).to.eql('Movie is added');
       sinon.assert.calledWith(create, aMovie);
     });
 
@@ -33,14 +33,14 @@ describe('MovieController', () => {
       aMovieWithId.title = '';
       create.resolves(aMovieWithId);
       const response = await controller.create(aMovieWithId);
-      expect(response.message).to.eql('Field title is required.');
+      expect(response.status).to.eql(false);
     });
 
     it('returns a movie details', async () => {
       const findById = movieRepo.stubs.findById;
       findById.resolves(aMovieWithId);
       const response = await controller.findById(aMovieWithId.id as string);
-      expect(response.data).to.eql(aMovieWithId);
+      expect(response).to.eql(aMovieWithId);
       sinon.assert.calledWith(findById, aMovieWithId.id);
     });
 
@@ -71,7 +71,7 @@ describe('MovieController', () => {
     movieRepo = createStubInstance(MovieRepository);
     aMovie = givenMovie();
     aMovieWithId = givenMovie({
-      id: '635e2a561fd72a3b343f1576',
+      id: '635d3d39425fc647181495f2',
     });
     aListOfMovies = [
       aMovieWithId,
@@ -87,7 +87,7 @@ describe('MovieController', () => {
     ] as Movie[];
     aChangedMovie = givenMovie({
       id: aMovieWithId.id,
-      title: 'Barbarian -edited',
+      title: 'Test -edited',
     });
 
     controller = new MovieController(movieRepo);

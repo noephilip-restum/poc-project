@@ -57,7 +57,7 @@ export class ActorController {
       if (!actor.age) throw new Error('Age is required');
       if (!actor.image_link) throw new Error('Image Link is required');
 
-      this.actorRepository.create(actor);
+      await this.actorRepository.create(actor);
       return {data: [], status: true, message: 'Actor is successfully added'};
     } catch (err) {
       return {data: [], status: false, message: err.message};

@@ -85,6 +85,7 @@ export class UsersController {
   })
   async login(
     @requestBody(CredentialsRequestBody) credentials: Credentials,
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   ): Promise<{token: string; userProfile: any}> {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
