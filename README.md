@@ -1,10 +1,9 @@
 # poc-project
 
-# Description
-
 Digital Streaming System which allows administrators to manage the movie catalogue information about the movies, actors, movie reviews (like Netflix or Amazon Prime) and users management, While normal user can access movies, actors and able to give movie reviews, This application stores details of movies, actors, movie reviews and users in Mongodb nosql database. The application frontend has to be implemented using HTML, SCSS, Javascript, React Typescript, Redux while backend using Loopback and Mongodb nosql Database, for code quality and security it uses Sonarqube, and for unit testing it uses Jest along with React Testing Library.
 
 ![moviereview](./home.png)
+![moviereview](./view.png)
 
 # Features
 
@@ -15,7 +14,8 @@ Digital Streaming System which allows administrators to manage the movie catalog
 # Technologies used:
 
 - React - Typescript
-- HTML - SCSS
+- MUI
+- React Hooks
 - Redux Toolkit
 - Loopback 4
 - MongoDB
@@ -51,7 +51,8 @@ This app has the following models:
 - Use `npm test` to run test on both FE and BE services.
 - Use `npx jest --coverage` to see coverage on both services.
 
-Sonarqube Scanner Results
+# SonarQube Result
+
 Front-End:
 ![FE](./fe.png)
 
