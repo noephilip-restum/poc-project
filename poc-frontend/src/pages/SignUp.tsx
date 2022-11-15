@@ -80,6 +80,7 @@ const SignUp = () => {
           flexDirection: "column",
           alignItems: "center",
         }}
+        data-testid="signup"
       >
         <Avatar sx={{ m: 1 }}>
           <LockOutlinedIcon />

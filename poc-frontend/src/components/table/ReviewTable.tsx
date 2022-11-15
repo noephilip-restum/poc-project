@@ -213,10 +213,16 @@ export const ReviewTable = () => {
         customBodyRender: (value: number) => {
           return (
             <>
-              <Button onClick={() => handleClickOpen(value, "edit")}>
+              <Button
+                data-testid="editButton"
+                onClick={() => handleClickOpen(value, "edit")}
+              >
                 Edit
               </Button>
-              <Button onClick={() => handleClickOpen(value, "delete")}>
+              <Button
+                data-testid="deleteButton"
+                onClick={() => handleClickOpen(value, "delete")}
+              >
                 Delete
               </Button>
             </>
@@ -232,9 +238,9 @@ export const ReviewTable = () => {
   };
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%" }} data-testid="reviewContent">
         <Paper sx={{ width: "100%", mb: 2 }}>
-          <TableContainer>
+          <TableContainer data-testid="reviewTable">
             <MUIDataTable
               title={
                 <Box>

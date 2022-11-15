@@ -18,7 +18,7 @@ export const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other} data-testid="dialogTitle">
       {children}
       {onClose ? (
         <IconButton

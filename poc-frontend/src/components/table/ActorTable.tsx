@@ -179,10 +179,16 @@ export const ActorTable = () => {
         customBodyRender: (value: number) => {
           return (
             <>
-              <Button onClick={() => handleClickOpen(value, "edit")}>
+              <Button
+                data-testid="editButton"
+                onClick={() => handleClickOpen(value, "edit")}
+              >
                 Edit
               </Button>
-              <Button onClick={() => handleClickOpen(value, "delete")}>
+              <Button
+                data-testid="deleteButton"
+                onClick={() => handleClickOpen(value, "delete")}
+              >
                 Delete
               </Button>
             </>
@@ -198,13 +204,14 @@ export const ActorTable = () => {
   };
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%" }} data-testid="actorContent">
         <Paper sx={{ width: "100%", mb: 2 }}>
-          <TableContainer>
+          <TableContainer data-testid="actorTable">
             <MUIDataTable
               title={
                 <Box>
                   <IconButton
+                    data-testid="addButton"
                     onClick={() => {
                       setActor(actorState);
                       setOpen({ ...open, add: true });

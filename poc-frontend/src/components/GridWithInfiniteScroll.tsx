@@ -23,12 +23,16 @@ const GridWithInfiniteScroll = ({ data }: GridWithInfiniteScrollProps) => {
       }}
     >
       {data.length !== 0 && (
-        <Typography variant="h5" sx={{ color: "text.primary", mb: 2 }}>
+        <Typography
+          variant="h5"
+          sx={{ color: "text.primary", mb: 2 }}
+          data-testid="title"
+        >
           {location.pathname === `/browse/movies` ? "All Movies" : "All Actors"}
         </Typography>
       )}
 
-      <Grid container spacing={2}>
+      <Grid container spacing={2} data-testid="list">
         {data.length !== 0 ? (
           data.map((video: any) => (
             <Grid key={video.id} item xs={6} sm={3} md={2} sx={{ zIndex: 1 }}>

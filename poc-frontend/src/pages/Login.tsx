@@ -57,7 +57,12 @@ const Login = () => {
   };
 
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
+    <Grid
+      container
+      component="main"
+      sx={{ height: "100vh" }}
+      data-testid="login"
+    >
       <CssBaseline />
       <Grid
         item

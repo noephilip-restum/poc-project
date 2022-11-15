@@ -39,7 +39,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other} data-testid="dialogTitle">
       {children}
       {onClose ? (
         <IconButton
@@ -228,10 +228,16 @@ export const UserTable = () => {
             <>
               {users[dataIndex.rowIndex].account_role !== "root" ? (
                 <>
-                  <Button onClick={() => handleClickOpen(value, "edit")}>
+                  <Button
+                    data-testid="editButton"
+                    onClick={() => handleClickOpen(value, "edit")}
+                  >
                     Edit
                   </Button>
-                  <Button onClick={() => handleClickOpen(value, "delete")}>
+                  <Button
+                    onClick={() => handleClickOpen(value, "delete")}
+                    data-testid="deleteButton"
+                  >
                     Delete
                   </Button>
                 </>
@@ -249,13 +255,15 @@ export const UserTable = () => {
   };
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%" }} data-testid="userContent">
         <Paper sx={{ width: "100%", mb: 2 }}>
-          <TableContainer>
+          <TableContainer data-testid="userTable">
             <MUIDataTable
               title={
                 <Box>
                   <IconButton
+                    data-testid="addButton"
+                    name="addBtn"
                     onClick={() => {
                       setCurrentUser(userState);
                       setOpen({ ...open, add: true });
@@ -279,16 +287,19 @@ export const UserTable = () => {
       </Box>
 
       <Dialog
+        data-testid="deleteDialog"
         open={open.delete}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
+        aria-labelledby="delete-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth
         maxWidth="xs"
       >
         <DialogTitle id="alert-dialog-title">{"Delete this User?"}</DialogTitle>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose} aria-label="disagree">
+            Disagree
+          </Button>
           <Button onClick={handleDeleteSubmit} autoFocus>
             Agree
           </Button>
@@ -297,6 +308,7 @@ export const UserTable = () => {
 
       <BootstrapDialog
         onClose={handleClose}
+        data-testid="addEditDialog"
         aria-labelledby="customized-dialog-title"
         open={open.add || open.edit}
       >

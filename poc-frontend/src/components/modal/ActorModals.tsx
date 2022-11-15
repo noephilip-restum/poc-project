@@ -23,6 +23,7 @@ export const AddEditActorModal = ({
 }: any) => {
   return (
     <BootstrapDialog
+      data-testid="addEditDialog"
       onClose={handleClose}
       aria-labelledby="customized-dialog-title"
       open={open.add || open.edit}
@@ -120,6 +121,7 @@ export const DeleteActorModal = ({
 }: any) => {
   return (
     <Dialog
+      data-testid="deleteDialog"
       open={open.delete}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"

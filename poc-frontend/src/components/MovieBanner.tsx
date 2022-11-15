@@ -59,6 +59,7 @@ const MovieBanner = () => {
           pb: "40%",
           mb: 3,
         }}
+        data-testid="banner"
       >
         <Box
           sx={{

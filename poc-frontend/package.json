@@ -19,6 +19,7 @@
     "axios": "^0.27.2",
     "dayjs": "^1.11.6",
     "framer-motion": "^7.1.0",
+    "jest-css-modules-transform": "^4.4.2",
     "mui-datatables": "^4.2.2",
     "nyc": "^15.1.0",
     "react": "^18.2.0",
@@ -30,6 +31,7 @@
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
     "react-toastify": "^9.1.1",
+    "redux-mock-store": "^1.5.4",
     "slick-carousel": "^1.8.1",
     "typescript": "^4.4.2",
     "use-immer": "^0.7.0",
@@ -38,7 +40,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
     "eject": "react-scripts eject",
     "coverage": "npm test -- --coverage --watchAll",
     "test-coverage": "react-scripts test --coverageDirectory test-coverage --transformIgnorePatterns \"node_modules/(?!axios)/\" --coverage --watchAll=false --testResultsProcessor jest-sonar-reporter"
@@ -61,6 +63,19 @@
       "last 1 safari version"
     ]
   },
+  "jestSonar": {
+    "reportPath": "test-coverage/sonar",
+    "reportFile": "sonar-report.xml",
+    "indent": 4
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "@types/mui-datatables": "^3.7.9",
+    "@types/react-infinite-scroller": "^1.2.3",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/react-slick": "^0.23.10",
+    "@types/redux-mock-store": "^1.0.3"
+  },
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}"
@@ -72,17 +87,9 @@
         "lines": 60,
         "statements": -10
       }
+    },
+    "transform": {
+      ".+\\.(css|styl|less|sass|scss)$": "<rootDir>/node_modules/jest-css-modules-transform"
     }
-  },
-  "jestSonar": {
-    "reportPath": "test-coverage/sonar",
-    "reportFile": "sonar-report.xml",
-    "indent": 4
-  },
-  "devDependencies": {
-    "@types/mui-datatables": "^3.7.9",
-    "@types/react-infinite-scroller": "^1.2.3",
-    "@types/react-router-dom": "^5.3.3",
-    "@types/react-slick": "^0.23.10"
   }
 }

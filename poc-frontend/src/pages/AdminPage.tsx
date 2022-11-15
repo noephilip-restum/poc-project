@@ -59,7 +59,10 @@ const ClippedDrawer = () => {
           <Typography variant="h6" noWrap component="div">
             Admin Page
           </Typography>
-          <Box sx={{ flexGrow: 0, display: "flex", gap: 2 }}>
+          <Box
+            sx={{ flexGrow: 0, display: "flex", gap: 2 }}
+            data-testid="avatar"
+          >
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar src="/static/images/avatar/2.jpg" />
@@ -105,7 +108,7 @@ const ClippedDrawer = () => {
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: "auto", width: "200px" }}>
+        <Box data-testid="sideNav" sx={{ overflow: "auto", width: "200px" }}>
           <List>
             <ListItem disablePadding onClick={() => navigate("/admin/users")}>
               <ListItemButton>
@@ -146,7 +149,7 @@ const ClippedDrawer = () => {
           <Divider />
         </Box>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box data-testid="tables" component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "20px" }}>
           <Link underline="hover" color="inherit">

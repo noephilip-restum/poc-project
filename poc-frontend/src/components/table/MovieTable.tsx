@@ -53,7 +53,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other} data-testid="dialogTitle">
       {children}
       {onClose ? (
         <IconButton
@@ -216,10 +216,7 @@ export const MovieTable = () => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setPersonName(typeof value === "string" ? value.split(",") : value);
 
     setMovie({
       ...movie,
@@ -258,9 +255,6 @@ export const MovieTable = () => {
       options: {
         filter: true,
         sort: true,
-        // customBodyRender: (value: String, rowData: any) => {
-        //   return `${value} ${rowData.tableData[0][1]}`;
-        // },
       },
     },
     {
@@ -281,10 +275,16 @@ export const MovieTable = () => {
         customBodyRender: (value: number) => {
           return (
             <>
-              <Button onClick={() => handleClickOpen(value, "edit")}>
+              <Button
+                data-testid="editButton"
+                onClick={() => handleClickOpen(value, "edit")}
+              >
                 Edit
               </Button>
-              <Button onClick={() => handleClickOpen(value, "delete")}>
+              <Button
+                data-testid="deleteButton"
+                onClick={() => handleClickOpen(value, "delete")}
+              >
                 Delete
               </Button>
             </>
@@ -300,9 +300,9 @@ export const MovieTable = () => {
   };
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%" }} data-testid="movieContent">
         <Paper sx={{ width: "100%", mb: 2 }}>
-          <TableContainer>
+          <TableContainer data-testid="movieTable">
             <MUIDataTable
               title={
                 <Box>
@@ -330,6 +330,7 @@ export const MovieTable = () => {
       </Box>
 
       <Dialog
+        data-testid="deleteDialog"
         open={open.delete}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -347,6 +348,7 @@ export const MovieTable = () => {
       </Dialog>
 
       <BootstrapDialog
+        data-testid="addEditDialog"
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open.add || open.edit}
